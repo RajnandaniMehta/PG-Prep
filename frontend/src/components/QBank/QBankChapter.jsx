@@ -1,0 +1,42 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+
+function QBankChapter() {
+    const {subjectId}=useParams();
+    const [chapters,setChapters]=useState([]);
+    const navigate=useNavigate();
+    useEffect(()=>{
+            const fetchChapters=async ()=>{
+                const {data}=await axios.get(`/api/${subjectId}`);
+                setChapters(data.chapters);
+            }
+            fetchChapters();
+    },[])
+  return (
+    <div className="pt-24 min-h-screen bg-[#f8f9fa] px-6 py-12">
+        <div className="max-w-6xl mx-auto">
+        <h1  className="text-4xl font-bold text-gray-800 mb-12 text-center">Choose Chapter : </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {chapters.map((item) => (
+            <div
+              key={item._id}
+              className="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-200 border border-gray-200 p-6 cursor-pointer"
+              onClick={() => {navigate(`/qbank/${item.subjectId}/${item._id}`)}}
+            >
+              <h2 className="text-lg font-semibold text-gray-700 mb-1">
+                {item.chapterName}
+              </h2>
+              <p className="text-sm text-gray-500">
+                View all questions from this chapter →
+              </p>
+            </div>
+          ))}
+        </div>
+        </div>
+        
+    </div>
+  )
+}
+
+export default QBankChapter

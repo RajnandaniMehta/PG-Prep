@@ -1,0 +1,40 @@
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+function QBankHome() {
+    const navigate=useNavigate();
+    const [subjects,setSubjects]=useState([]);
+    useEffect(()=>{
+        const fetchSubjects=async()=>{
+            const res= await axios.get('/api/subjects');
+            setSubjects(res.data.subjects);
+        }
+        fetchSubjects();
+    },[]);
+  return (
+    <div className="pt-24 min-h-screen bg-[#f8f9fa] px-6 py-12">
+        <div className="max-w-6xl mx-auto">
+        <h1 className="text-4xl font-bold text-gray-800 mb-12 text-center">Choose Subject to Begin: </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {subjects.map((item) => (
+            <div
+              key={item._id}
+              className="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-200 border border-gray-200 p-6 cursor-pointer"
+              onClick={() => navigate(`/qbank/${item._id}`)}
+            >
+              <h2 className="text-lg font-semibold text-gray-700 mb-1">
+                {item.subjectName}
+              </h2>
+              <p className="text-sm text-gray-500">
+                View all questions from this subject →
+              </p>
+            </div>
+          ))}
+        </div>
+        </div>
+        
+    </div>
+  )
+}
+
+export default QBankHome
