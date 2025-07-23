@@ -8,8 +8,18 @@ function QBankChapter() {
     const navigate=useNavigate();
     useEffect(()=>{
             const fetchChapters=async ()=>{
-                const {data}=await axios.get(`/api/${subjectId}`);
-                setChapters(data.chapters);
+              try {
+                sessionStorage.setItem("redirectTo",window.location.pathname);
+              const {data}=await axios.get(`/api/chapters/sub/${subjectId}`,{withCredentials:true});
+                if(data.success)
+              setChapters(data.chapters);
+            else{
+              navigate('/login');
+            }
+              } catch (error) {
+                navigate('/login')
+              }
+              
             }
             fetchChapters();
     },[])

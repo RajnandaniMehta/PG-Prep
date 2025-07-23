@@ -5,6 +5,9 @@ import QBankChapter from "./QBank/QBankChapter";
 import QBankQHome from "./QBank/QBankQHome";
 import QBankQuestion from "./QBank/QBankQuestion";
 import AddQuestion from "./Admin/AddQuestion";
+import AddSubject from "./Admin/AddSubject";
+import AddChapter from "./Admin/AddChapter";
+import Admin from "./Sidebar/Admin";
 export {
     Header,
     Footer,
@@ -12,5 +15,8 @@ export {
     QBankChapter,
     QBankQHome,
     QBankQuestion,
-    AddQuestion
+    AddQuestion,
+    AddSubject,
+    AddChapter,
+    Admin
 }

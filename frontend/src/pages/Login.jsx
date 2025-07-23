@@ -1,24 +1,29 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 function Login() {
   const navigate =useNavigate();
     const [username, setUsername]=useState('');
     const [password, setPassword]=useState('');
+    const location=useLocation();
     const handleSubmit=async(e)=>{
+        
         try {
             e.preventDefault();
-        const {data}=await axios.post("/api/login",{username,password},
+        const {data}=await axios.post("/api/users/login",{username,password},
             { withCredentials: true, headers: {"Content-Type" : "application/json"}}
         )
         if(data.success){
-            navigate(`/${data.userId}`);
+            const redirectPath = sessionStorage.getItem("redirectTo") || "/qbank";
+            sessionStorage.removeItem("redirectTo");
+            console.log(redirectPath);
+            navigate(redirectPath);
         }else{
-            navigate('/')
+            navigate('/login')
         }
         } catch (error) {
-            navigate('/')
+            navigate('/login')
         }
         
     }
@@ -30,10 +35,10 @@ function Login() {
             <input type="text" name="username" id="username" 
             value={username} 
             onChange={(e)=>setUsername(e.target.value)}
-            placeholder='Enter Username'/>
+            placeholder='Enter Username' required/>
             <input type="text" name="password" id="password" value={password} 
             onChange={(e)=>setPassword(e.target.value)}
-            placeholder='Enter Password'/>
+            placeholder='Enter Password' required/>
             <button className='mx-4'>Login</button>
             <Link to='/signup' className='text-blue-600'>
                 New User?signup

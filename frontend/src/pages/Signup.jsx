@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Signup() {
     const navigate =useNavigate();
@@ -10,7 +10,7 @@ function Signup() {
     const [password, setPassword]=useState('');
     const handleSubmit=async(e)=>{
         e.preventDefault();
-        const {data}=await axios.post("/api/signup",{username,email,password},
+        const {data}=await axios.post("/api/users/signup",{username,email,password},
             { withCredentials: true, headers: {"Content-Type" : "application/json"}}
         )
         if(data.success){
@@ -25,14 +25,17 @@ function Signup() {
             <input type="text" name="username" id="username" 
             value={username} 
             onChange={(e)=>setUsername(e.target.value)}
-            placeholder='Enter Username'/>
+            placeholder='Enter Username' required/>
             <input type="email" name="email" id="email" value={email} 
             onChange={(e)=>setEmail(e.target.value)}
-            placeholder='Enter Email'/>
+            placeholder='Enter Email' required/>
             <input type="text" name="password" id="password" value={password} 
             onChange={(e)=>setPassword(e.target.value)}
-            placeholder='Enter Password'/>
+            placeholder='Enter Password' required/>
             <button>signup</button>
+            <Link to='/login' className='text-blue-600'>
+                Already user?Login
+            </Link>
         </form>
     </div>
   )

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React from 'react'
-import { useEffect,useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
-function AddQuestion() {
-  const navigate=useNavigate();
+function UpdateQuestion() {
+    const {questionId}=useParams();
+    const navigate=useNavigate();
     const [allChapters,setAllChapters]=useState([]);
     const [formData,setFormData]=useState({
         question:"",
@@ -40,11 +40,20 @@ function AddQuestion() {
     }
     fetchChapters();
     },[])
+    useEffect(()=>{
+        const fetchq=async()=>{
+        const {data}=await axios.get(`/api/questions/${questionId}`);
+        // console.log(data);
+        setFormData(data.q);
+    }
+    fetchq();
+    },[])
 
     const handleSubmit = async(e)=>{
       e.preventDefault();
-      sessionStorage.setItem("redirectTo",window.location.pathname);
-      const {data}=await axios.post("/api/questions",{formData},{ withCredentials: true, headers: {"Content-Type" : "application/json"}});
+      sessionStorage.setItem("redirectToPath",window.location.pathname);
+      const {data}=await axios.post(`/api/questions/${questionId}`,{formData},
+        { withCredentials: true, headers: {"Content-Type" : "application/json"}});
       if(data.success){
         setFormData({
         question:"",
@@ -151,4 +160,4 @@ function AddQuestion() {
   )
 }
 
-export default AddQuestion
+export default UpdateQuestion

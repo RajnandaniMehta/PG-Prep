@@ -8,7 +8,6 @@ function QBank() {
         <Route path=':subjectId' element={<QBankChapter/>}/>
         <Route path=':subjectId/:chapterId' element={<QBankQHome/>}/>
         <Route path=':subjectId/:chapterId/practice' element={<QBankQuestion/>}/>
-
     </Routes>
     </>
     

@@ -7,7 +7,7 @@ function User() {
     const [user,setUser]=useState([]);
     useEffect(()=>{
         const fetchUser=async ()=>{
-            const {data}=await axios.get(`/api/u/id/${userId}`);
+            const {data}=await axios.get(`/api/users/${userId}`,{withCredentials:true});
             setUser(data.user);
         }
         fetchUser();

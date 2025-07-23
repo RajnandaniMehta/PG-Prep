@@ -7,11 +7,12 @@ function Admin() {
     const handleSubmit=async(e)=>{
         e.preventDefault();
         const {data}=await axios.post("/api/admin",{code},{ withCredentials: true, headers: {"Content-Type" : "application/json"}});
-        console.log(data);
         if(data.success){
-            navigate("/adminHome");
+            const redirectPath = sessionStorage.getItem("redirectToPath") || "/adminHome";
+            sessionStorage.removeItem("redirectToPath");
+            console.log(redirectPath);
+            navigate(redirectPath);
         }else{
-            console.log(data.message);
             navigate("/admin");
         }
     }
@@ -27,7 +28,8 @@ function Admin() {
             placeholder='Enter the ACCESS CODE' 
             onChange={(e)=>setCode(e.target.value)}
             value={code}
-             className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"/>
+             className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+             required/>
             <button 
            className="w-full bg-sky-600 text-white py-3 rounded-md font-semibold hover:bg-sky-700 transition duration-200"
              type='submit'>submit</button>

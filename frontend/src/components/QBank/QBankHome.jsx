@@ -6,8 +6,18 @@ function QBankHome() {
     const [subjects,setSubjects]=useState([]);
     useEffect(()=>{
         const fetchSubjects=async()=>{
-            const res= await axios.get('/api/subjects');
-            setSubjects(res.data.subjects);
+          try {
+            sessionStorage.setItem("redirectTo",window.location.pathname);
+            const {data}= await axios.get('/api/subjects',{ withCredentials: true });
+            if(data.success)
+            setSubjects(data.subjects);
+            else {
+              navigate("/login");}
+
+          } catch (error) {
+           navigate("/login");
+          }
+            
         }
         fetchSubjects();
     },[]);

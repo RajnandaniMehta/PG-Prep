@@ -1,16 +1,27 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function QBankQuestion() {
     const { subjectId, chapterId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState({});
     const [submittedQuestions, setSubmittedQuestions] = useState({});
+    const navigate=useNavigate();
     useEffect(() => {
         const fetchQ = async () => {
-            const { data } = await axios.get(`/api/${subjectId}/${chapterId}`);
+            try {
+            sessionStorage.setItem("redirectTo",window.location.pathname);
+            const { data } = await axios.get(`/api/questions/all/${chapterId}`,{withCredentials:true});
+            if(data.success)
             setQuestions(data.questions);
+        else{
+            navigate('/login');
+        }
+            } catch (error) {
+                navigate('/login')
+            }
+           
         }
         fetchQ();
     }, [])
