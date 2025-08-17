@@ -1,71 +1,109 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 function ShowChapter() {
-    const {subjectId}=useParams();
-    // console.log(subjectId)
-    const [chapters,setChapters]=useState([]);
-    const navigate=useNavigate();
-    useEffect(()=>{
-        const fetchChapters=async ()=>{ 
-          try {
-            sessionStorage.setItem("redirectToPath",window.location.pathname);
-            const {data}=await axios.get(`/api/chapters/sub/${subjectId}`);
-            if(data.success)
-            setChapters(data.chapters);
-          else navigate('/admin');
-          } catch (error) {
-            navigate('/admin');
-          }
-            
-        }
-        fetchChapters();
-    },[])
-     const handleEdit=(chapterId)=>{
-                navigate(`/adminHome/chapters/edit/${chapterId}`);
-            }
-    const handleDelete=async(chapterId)=>{
-        const {data}=await axios.delete(`/api/chapters/${chapterId}`);
-        if(data.success){
-        setChapters(prev => prev.filter(chapter => chapter._id !== chapterId));
-        }
+  const { subjectId } = useParams();
+  const [chapters, setChapters] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchChapters = async () => {
+      try {
+        sessionStorage.setItem("redirectToPath", window.location.pathname);
+        const { data } = await axios.get(`/api/chapters/sub/${subjectId}`);
+        if (data.success) setChapters(data.chapters);
+        else navigate('/admin');
+      } catch (error) {
+        navigate('/admin');
+      }
+    };
+    fetchChapters();
+  }, [subjectId, navigate]);
+
+  const handleEdit = (chapterId) => {
+    navigate(`/adminHome/chapters/edit/${chapterId}`);
+  };
+
+  const handleDelete = async (chapterId) => {
+    const { data } = await axios.delete(`/api/chapters/${chapterId}`);
+    if (data.success) {
+      setChapters(prev => prev.filter(chapter => chapter._id !== chapterId));
     }
+  };
+
   return (
-    <div className="min-h-screen bg-[#f8f9fa] px-6 py-12">
-        <div className="max-w-6xl mx-auto">
-        <h1  className="text-4xl font-bold text-gray-800 mb-12 text-center">Choose Chapter : </h1>
-        <Link to={'/adminHome/chapters/new'}>Add new +</Link>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">
+            📖 Choose Chapter
+          </h1>
+          <Link
+            to="/adminHome/chapters/new"
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-sky-500 to-sky-600 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg shadow hover:shadow-lg hover:scale-105 transition text-sm sm:text-base"
+          >
+            <FaPlus /> Add New
+          </Link>
+        </div>
+
+        {/* Chapters Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {chapters.map((item) => (
-            <div key={item._id}>
             <div
               key={item._id}
-              className="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-200 border border-gray-200 p-6 cursor-pointer"
-              onClick={() => {navigate(`/adminHome/chapters/show/${item._id}`)}}
+              className="bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg hover:border-sky-400 transition transform hover:-translate-y-1 p-4 sm:p-5 md:p-6 flex flex-col justify-between"
             >
-              <h2 className="text-lg font-semibold text-gray-700 mb-1">
-                {item.chapterName}
-              </h2>
-              <p className="text-sm text-gray-500">
-                View all questions from this chapter →
-              </p>
-            </div>
-            <div>
-                <button 
-                className='mx-4'
-                onClick={()=>handleEdit(`${item._id}`)}>edit</button>
-                <button onClick={()=>handleDelete(`${item._id}`)}>delete</button>
-              
-            </div>
+              {/* Chapter Card */}
+              <div
+                className="cursor-pointer"
+                onClick={() => navigate(`/adminHome/chapters/show/${item._id}`)}
+              >
+                <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-1">
+                  {item.chapterName}
+                </h2>
+                <p className="text-xs sm:text-sm md:text-base text-gray-500">
+                  View all questions from this chapter →
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end mt-4 gap-1 sm:gap-2">
+                <button
+                  onClick={() => handleEdit(item._id)}
+                  className="p-1.5 sm:p-2 rounded-full bg-yellow-100 text-yellow-600 hover:bg-yellow-200 transition"
+                  title="Edit"
+                >
+                  <FaEdit className="text-sm sm:text-base" />
+                </button>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="p-1.5 sm:p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition"
+                  title="Delete"
+                >
+                  <FaTrash className="text-sm sm:text-base" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
-        </div>
-        
+
+        {/* Empty State */}
+        {chapters.length === 0 && (
+          <div className="text-center mt-16 text-gray-500 text-base sm:text-lg">
+            No chapters found.  
+            <Link to="/adminHome/chapters/new" className="text-sky-600 hover:underline ml-1">
+              Add a new chapter
+            </Link>
+          </div>
+        )}
+
+      </div>
     </div>
-  )
+  );
 }
 
-export default ShowChapter
+export default ShowChapter;

@@ -8,6 +8,8 @@ router.post("",isAdmin,wrapAsync(questionController.newQuestion));
 router.get("/:questionId",wrapAsync(questionController.getQuestion));
 router.post("/:questionId",isAdmin,wrapAsync(questionController.updateQuestion));
 router.delete("/:questionId",isAdmin,wrapAsync(questionController.deleteQuestion));
-router.get("/all/:chapterId",wrapAsync(questionController.getQChapterWise));
+router.get("/all/:chapterId",isLoggedIn,wrapAsync(questionController.getQChapterWise));
+router.get("/admin/:chapterId",isAdmin,wrapAsync(questionController.getQChapterWise));
+
 
 export default router;

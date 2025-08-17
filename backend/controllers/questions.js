@@ -21,7 +21,7 @@ export const newQuestion=async (req,res)=>{
 export const getQuestion=async(req,res)=>{
     const {questionId}=req.params;
     const q=await Question.findById(questionId);
-    console.log(q);
+    // console.log(q);
     return res.json({
         success:true,
         message:"fetched",

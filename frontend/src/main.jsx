@@ -20,13 +20,19 @@ import ShowChapter from './pages/Admin/ShowChapter.jsx'
 import ShowQuestion from './pages/Admin/ShowQuestion.jsx'
 import UpdateQuestion from './pages/Admin/UpdateQuestion.jsx'
 import ShowAllQ from './pages/Admin/ShowAllQ.jsx'
+import Profile from './pages/User/Profile.jsx'
+import GetPost from './pages/User/GetPost.jsx'
+import AddPost from './pages/User/AddPost.jsx'
+import UserHome from './pages/User/UserHome.jsx'
+import Adminhome from './pages/Admin/AdminHome.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route path='' element={<Home />} />
-      <Route path='/qbank/*' element={<QBank />} />
+      {/* <Route path='/qbank/*' element={<QBank />} /> */}
       <Route path='/admin' element={<Admin />} />
       <Route path="/adminHome" element={<AdminHome />}>
+        <Route path='home' element={<Adminhome/>}/>
         <Route path="subjects">
           <Route index element={<Subjects />} />
           <Route path="new" element={<AddSubject />} />
@@ -46,9 +52,15 @@ const router = createBrowserRouter(
           <Route path="edit/:questionId" element={<UpdateQuestion />} />
         </Route>
       </Route>
+      <Route path="/user/:userId" element={<User />}>
+          <Route index element={<UserHome/>}/>
+         <Route path="posts" element={<GetPost />} />
+         <Route path="profile" element={<Profile />} />
+         <Route path='post' element={<AddPost/>}/>
+         <Route path='qbank/*' element={<QBank />} />
+      </Route>
       <Route path='/signup' element={<Signup />} />
       <Route path='/login' element={<Login />} />
-      <Route path='/:userId' element={<User />} />
     </Route>
   )
 )

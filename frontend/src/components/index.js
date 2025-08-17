@@ -8,6 +8,8 @@ import AddQuestion from "./Admin/AddQuestion";
 import AddSubject from "./Admin/AddSubject";
 import AddChapter from "./Admin/AddChapter";
 import Admin from "./Sidebar/Admin";
+import UserSidebar from "./Sidebar/UserSidebar";
+import FooterC from "./Footer/FooterC";
 export {
     Header,
     Footer,
@@ -18,5 +20,7 @@ export {
     AddQuestion,
     AddSubject,
     AddChapter,
-    Admin
+    Admin,
+    UserSidebar,
+    FooterC
 }

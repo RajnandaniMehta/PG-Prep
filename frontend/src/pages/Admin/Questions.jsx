@@ -1,56 +1,111 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'
+import { FaPlus, FaEye, FaEdit, FaTrash } from 'react-icons/fa'
+
 function Questions() {
-  const [questions, setQuestions] = useState([]);
-  const navigate=useNavigate();
-  useEffect(()=>{
-    const fetchQ=async()=>{
+  const [questions, setQuestions] = useState([])
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchQ = async () => {
       try {
-            sessionStorage.setItem("redirectToPath",window.location.pathname);
-        const {data}=await axios.get('/api/questions',{withCredentials:true});
-        if(data.success)
-       setQuestions(data.questions);
+        sessionStorage.setItem("redirectToPath", window.location.pathname);
+        const { data } = await axios.get('/api/questions', { withCredentials: true })
+        if (data.success) setQuestions(data.questions)
         else navigate('/admin')
-            } catch (error) {
-            navigate('/admin');
-          }
+      } catch (error) {
+        navigate('/admin')
+      }
     }
-    fetchQ();
-  },[])
-  const handleView=async(questionId)=>{
-    navigate(`/adminHome/questions/show/${questionId}`);
+    fetchQ()
+  }, [])
+
+  const handleView = (questionId) => {
+    navigate(`/adminHome/questions/show/${questionId}`)
   }
-  const handleEdit=async(questionId)=>{
-    navigate(`/adminHome/questions/edit/${questionId}`);
+
+  const handleEdit = (questionId) => {
+    navigate(`/adminHome/questions/edit/${questionId}`)
   }
-  const handleDelete=async(questionId)=>{
-    const {data}=await axios.delete(`/api/questions/${questionId}`);
-    console.log(data);
-    if(data.success){
-                  setQuestions(prev => prev.filter(question => question._id !== questionId));
-                }
+
+  const handleDelete = async (questionId) => {
+    const { data } = await axios.delete(`/api/questions/${questionId}`)
+    if (data.success) {
+      setQuestions(prev => prev.filter(q => q._id !== questionId))
+    }
   }
+
   return (
-    <div>
-      <h1>Questions</h1>
-      <Link to={"/adminHome/questions/new"}>Add new + </Link>
-      <ul>
-        {questions.map(item=>(
-          <li key={item._id}>
-            <p>{item.question}</p>
-            <button className="bg-sky-600 text-white px-2 py-2 rounded-md hover:bg-sky-700 transition mx-2"
-            onClick={()=>handleView(item._id)}>view</button>
-            <button className="bg-blue-600 text-white px-2 py-2 rounded-md hover:bg-blue-700 transition mx-1"
-            onClick={()=>handleEdit(item._id)}>edit</button>
-            <button className="bg-red-600 text-white px-2 py-2 rounded-md hover:bg-red-700 transition mx-2"
-            onClick={()=>handleDelete(item._id)}>delete</button>
-          </li>
-        ))}
-      </ul>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4 sm:gap-0">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
+            ❓ Questions
+          </h1>
+          <Link
+            to="/adminHome/questions/new"
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-sky-500 to-sky-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition text-sm sm:text-base"
+          >
+            <FaPlus /> Add New
+          </Link>
+        </div>
+
+        {/* Questions Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          {questions.map((item) => (
+            <div
+              key={item._id}
+              className="bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg hover:border-sky-400 transition transform hover:-translate-y-1 p-4 sm:p-5 md:p-6 flex flex-col justify-between"
+            >
+              {/* Question Text */}
+              <p className="text-gray-800 text-sm sm:text-base md:text-lg mb-4 line-clamp-3">
+                {item.question}
+              </p>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-1 sm:gap-2">
+                <button
+                  onClick={() => handleView(item._id)}
+                  className="p-1.5 sm:p-2 rounded-full bg-sky-100 text-sky-600 hover:bg-sky-200 transition"
+                  title="View"
+                >
+                  <FaEye className="text-sm sm:text-base" />
+                </button>
+                <button
+                  onClick={() => handleEdit(item._id)}
+                  className="p-1.5 sm:p-2 rounded-full bg-yellow-100 text-yellow-600 hover:bg-yellow-200 transition"
+                  title="Edit"
+                >
+                  <FaEdit className="text-sm sm:text-base" />
+                </button>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="p-1.5 sm:p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition"
+                  title="Delete"
+                >
+                  <FaTrash className="text-sm sm:text-base" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Empty State */}
+        {questions.length === 0 && (
+          <div className="text-center mt-16 text-gray-500 text-base sm:text-lg">
+            No questions found.  
+            <Link to="/adminHome/questions/new" className="text-sky-600 hover:underline ml-1">
+              Add a new question
+            </Link>
+          </div>
+        )}
+
+      </div>
     </div>
   )
 }
 
-export default Questions
+export default Questions;

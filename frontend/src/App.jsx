@@ -2,11 +2,10 @@ import { Outlet } from "react-router-dom"
 import { Footer, Header } from "./components"
 function App() {
   return (
-    <>
+    <div>
     <Header/>
-     <Outlet/>
-     <Footer/>
-    </>
+     <Outlet/>     
+    </div>
   )
 }
 

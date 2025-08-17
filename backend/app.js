@@ -10,9 +10,12 @@ import subjectRouter from "./routes/subjects.js";
 import chapterRouter from "./routes/chapters.js";
 import questionRouter from "./routes/questions.js";
 import userRouter from "./routes/users.js";
+import postRouter from "./routes/posts.js";
+import { Post } from './models/post.js';
+import "dotenv/config"
 
 const app=express();
-const MONGO_URL="mongodb://127.0.0.1:27017/PGprep";
+const MONGO_URL=process.env.ATLASDB_URL;
 const ADMIN_CODE="PG_PREP";
 const seesionOptions={
     secret:"mySecret",
@@ -56,7 +59,7 @@ app.use("/api/subjects",subjectRouter);
 app.use("/api/chapters",chapterRouter);
 app.use("/api/questions",questionRouter);
 app.use("/api/users",userRouter);
-
+app.use("/api/posts",postRouter);
 app.post("/api/admin",wrapAsync(async(req,res)=>{
     const {code}=req.body;
     if(code===ADMIN_CODE){

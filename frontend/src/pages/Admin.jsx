@@ -8,9 +8,9 @@ function Admin() {
         e.preventDefault();
         const {data}=await axios.post("/api/admin",{code},{ withCredentials: true, headers: {"Content-Type" : "application/json"}});
         if(data.success){
-            const redirectPath = sessionStorage.getItem("redirectToPath") || "/adminHome";
+            const redirectPath = sessionStorage.getItem("redirectToPath") || "/adminHome/home";
             sessionStorage.removeItem("redirectToPath");
-            console.log(redirectPath);
+            // console.log(redirectPath);
             navigate(redirectPath);
         }else{
             navigate("/admin");
