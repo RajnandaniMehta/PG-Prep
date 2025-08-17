@@ -12,9 +12,16 @@ import questionRouter from "./routes/questions.js";
 import userRouter from "./routes/users.js";
 import postRouter from "./routes/posts.js";
 import { Post } from './models/post.js';
+import cors from "cors";
 import "dotenv/config"
 
 const app=express();
+
+app.use(cors({
+  origin: "http://localhost:5173", // frontend ka URL
+  credentials: true               
+}));
+
 const MONGO_URL=process.env.ATLASDB_URL;
 const ADMIN_CODE="PG_PREP";
 const seesionOptions={
