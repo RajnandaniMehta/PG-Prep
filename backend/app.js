@@ -18,7 +18,7 @@ import "dotenv/config"
 const app=express();
 
 app.use(cors({
-  origin: "http://localhost:5173", // frontend ka URL
+  origin: "https://pg-prep-frontend.onrender.com", // frontend ka URL
   credentials: true               
 }));
 
