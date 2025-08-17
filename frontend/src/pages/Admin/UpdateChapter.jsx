@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaBook, FaEdit } from 'react-icons/fa';
 
 function UpdateChapter() {
+  const api = import.meta.env.VITE_API_URL;
   const { chapterId } = useParams();
   const [subjects, setSubjects] = useState([]);
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ function UpdateChapter() {
 
   useEffect(() => {
     const fetchChapter = async () => {
-      const { data } = await axios.get(`/api/chapters/${chapterId}`);
+      const { data } = await axios.get(`${api}/chapters/${chapterId}`,{withCredentials:true});
       setFormData(data.chap);
     };
     fetchChapter();
@@ -22,7 +23,7 @@ function UpdateChapter() {
 
   useEffect(() => {
     const fetchSubjects = async () => {
-      const res = await axios.get('/api/subjects');
+      const res = await axios.get(`${api}/subjects`,{withCredentials:true});
       setSubjects(res.data.subjects);
     };
     fetchSubjects();
@@ -40,7 +41,7 @@ function UpdateChapter() {
     e.preventDefault();
     sessionStorage.setItem("redirectToPath", window.location.pathname);
     const { data } = await axios.post(
-      `/api/chapters/${chapterId}`,
+      `${api}/chapters/${chapterId}`,
       { formData },
       { withCredentials: true, headers: { "Content-Type": "application/json" } }
     );

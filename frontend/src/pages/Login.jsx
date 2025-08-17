@@ -7,12 +7,13 @@ function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const api = import.meta.env.VITE_API_URL;
   const handleSubmit = async (e) => {
+    
     try {
       e.preventDefault();
       const { data } = await axios.post(
-        "/api/users/login",
+        `${api}/users/login`,
         { username, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );

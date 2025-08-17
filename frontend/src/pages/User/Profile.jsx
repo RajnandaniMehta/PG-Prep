@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function Profile() {
+  const api = import.meta.env.VITE_API_URL;
   const { userId } = useParams();
   const [user, setUser] = useState({});
   const [formData, setFormData] = useState({
@@ -18,7 +19,7 @@ function Profile() {
   // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
-      const { data } = await axios.get(`/api/users/${userId}`, { withCredentials: true });
+      const { data } = await axios.get(`${api}/users/${userId}`, { withCredentials: true });
       setUser(data.user);
       setFormData({
         bio: data.user.bio || "",
@@ -42,7 +43,7 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`/api/users/${userId}`, formData, { withCredentials: true });
+      const { data } = await axios.put(`${api}/users/${userId}`, formData, { withCredentials: true });
       setUser(data.user);
       alert("Profile updated successfully!");
     } catch (err) {

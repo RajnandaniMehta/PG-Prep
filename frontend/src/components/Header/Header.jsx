@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FaBars, FaTimes } from 'react-icons/fa'; // react-icons
 
 function Header() {
+  const api = import.meta.env.VITE_API_URL;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function Header() {
   useEffect(() => {
     const status = async () => {
       try {
-        const { data } = await axios.get('/api/users/status', { withCredentials: true });
+        const { data } = await axios.get(`${api}/users/status`, { withCredentials: true });
         setIsLoggedIn(data.loggedIn);
       } catch (error) {
         console.error('Error fetching login status', error);
@@ -23,7 +24,7 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      const { data } = await axios.get('/api/users/logout', { withCredentials: true });
+      const { data } = await axios.get(`${api}/users/logout`, { withCredentials: true });
       if (data.success) setIsLoggedIn(false);
       else setIsLoggedIn(true);
       navigate('/');

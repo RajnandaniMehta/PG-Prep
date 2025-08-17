@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaCheckCircle, FaLightbulb } from 'react-icons/fa';
 
 function ShowQuestion() {
+  const api = import.meta.env.VITE_API_URL;
   const { questionId } = useParams();
   const navigate = useNavigate();
   const [question, setQuestion] = useState({
@@ -23,7 +24,7 @@ function ShowQuestion() {
     const fetchQ = async () => {
       try {
         sessionStorage.setItem("redirectToPath", window.location.pathname);
-        const { data } = await axios.get(`/api/questions/${questionId}`, { withCredentials: true });
+        const { data } = await axios.get(`${api}/questions/${questionId}`, { withCredentials: true });
         if (data.success) setQuestion(data.q);
         else navigate('/admin');
       } catch (error) {

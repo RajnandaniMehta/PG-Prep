@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { FaPlus, FaEye, FaEdit, FaTrash } from 'react-icons/fa'
 
 function Questions() {
+  const api = import.meta.env.VITE_API_URL;
   const [questions, setQuestions] = useState([])
   const navigate = useNavigate()
 
@@ -11,7 +12,7 @@ function Questions() {
     const fetchQ = async () => {
       try {
         sessionStorage.setItem("redirectToPath", window.location.pathname);
-        const { data } = await axios.get('/api/questions', { withCredentials: true })
+        const { data } = await axios.get(`${api}/questions`, { withCredentials: true })
         if (data.success) setQuestions(data.questions)
         else navigate('/admin')
       } catch (error) {
@@ -30,7 +31,7 @@ function Questions() {
   }
 
   const handleDelete = async (questionId) => {
-    const { data } = await axios.delete(`/api/questions/${questionId}`)
+    const { data } = await axios.delete(`${api}/questions/${questionId}`,{withCredentials:true})
     if (data.success) {
       setQuestions(prev => prev.filter(q => q._id !== questionId))
     }

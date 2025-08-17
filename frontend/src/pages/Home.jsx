@@ -9,13 +9,14 @@ import axios from "axios";
 function Home() {
   const navigate = useNavigate();
  const [checkingAuth, setCheckingAuth] = useState(true);
+ const api = import.meta.env.VITE_API_URL;
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
   }, []);
   useEffect(()=>{
     const fetchDetails=async()=>{
        try {
-        const { data } = await axios.get("/api/users/status", { withCredentials: true });
+        const { data } = await axios.get(`${api}/users/status`, { withCredentials: true });
         if (data.loggedIn) {
           navigate(`/user/${data.user._id}`);
         } else {

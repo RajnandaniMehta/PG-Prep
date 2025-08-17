@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function AddQuestion() {
+  const api = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [allChapters, setAllChapters] = useState([]);
   const [formData, setFormData] = useState({
@@ -37,7 +38,7 @@ function AddQuestion() {
 
   useEffect(() => {
     const fetchChapters = async () => {
-      const { data } = await axios.get("/api/chapters", { withCredentials: true });
+      const { data } = await axios.get(`${api}/chapters`, { withCredentials: true });
       setAllChapters(data.allChapters);
     };
     fetchChapters();
@@ -47,7 +48,7 @@ function AddQuestion() {
     e.preventDefault();
     sessionStorage.setItem("redirectTo", window.location.pathname);
     const { data } = await axios.post(
-      "/api/questions",
+      `${api}/questions`,
       { formData },
       { withCredentials: true, headers: { "Content-Type": "application/json" } }
     );

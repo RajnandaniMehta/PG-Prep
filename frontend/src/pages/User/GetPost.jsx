@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function GetPost() {
+  const api = import.meta.env.VITE_API_URL;
   const [posts, setPosts] = useState([]);
   const { userId } = useParams();
   const [isComment, setIsComment] = useState(null);
@@ -13,7 +14,7 @@ function GetPost() {
 
   useEffect(() => {
     const fetchpost = async () => {
-      const { data } = await axios.get("/api/posts", { withCredentials: true });
+      const { data } = await axios.get(`${api}/posts`, { withCredentials: true });
       setPosts(data.posts);
     };
     fetchpost();
@@ -21,7 +22,7 @@ function GetPost() {
 
   useEffect(() => {
     const fetchpost = async () => {
-      const { data } = await axios.get("/api/posts/mine", { withCredentials: true });
+      const { data } = await axios.get(`${api}/posts/mine`, { withCredentials: true });
       setMyPost(data.posts);
     };
     fetchpost();

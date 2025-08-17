@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 function QBankChapter() {
+  const api = import.meta.env.VITE_API_URL;
     const {subjectId,userId}=useParams();
     const [chapters,setChapters]=useState([]);
     const navigate=useNavigate();
@@ -10,7 +11,7 @@ function QBankChapter() {
             const fetchChapters=async ()=>{
               try {
                 sessionStorage.setItem("redirectTo",window.location.pathname);
-              const {data}=await axios.get(`/api/chapters/sub/${subjectId}`,{withCredentials:true});
+              const {data}=await axios.get(`${api}/chapters/sub/${subjectId}`,{withCredentials:true});
                 if(data.success)
               setChapters(data.chapters);
             else{

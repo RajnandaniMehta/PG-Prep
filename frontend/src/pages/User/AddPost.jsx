@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 
 function AddPost() {
+  const api = import.meta.env.VITE_API_URL;
   const alltags = ['Anatomy','Anesthesia','Study Circle','PG 2025',"Medicine",'Micro-Biology','Bio-chemistry','Surgery'];
   const [tags, setTags] = useState([]);
   const [post, setPost] = useState('');
@@ -17,7 +18,7 @@ function AddPost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/api/posts', { post, tags }, { 
+      const { data } = await axios.post(`${api}/posts`, { post, tags }, { 
         withCredentials: true,
         headers: { "Content-Type" : "application/json" }
       });

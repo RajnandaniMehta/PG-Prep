@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 function Admin() {
     const [code, setCode]=useState("");
     const navigate=useNavigate();
+    const api = import.meta.env.VITE_API_URL;
     const handleSubmit=async(e)=>{
         e.preventDefault();
-        const {data}=await axios.post("/api/admin",{code},{ withCredentials: true, headers: {"Content-Type" : "application/json"}});
+        const {data}=await axios.post(`${api}/admin`,{code},{ withCredentials: true, headers: {"Content-Type" : "application/json"}});
         if(data.success){
             const redirectPath = sessionStorage.getItem("redirectToPath") || "/adminHome/home";
             sessionStorage.removeItem("redirectToPath");

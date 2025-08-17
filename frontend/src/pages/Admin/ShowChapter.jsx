@@ -4,6 +4,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 function ShowChapter() {
+  const api = import.meta.env.VITE_API_URL;
   const { subjectId } = useParams();
   const [chapters, setChapters] = useState([]);
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function ShowChapter() {
     const fetchChapters = async () => {
       try {
         sessionStorage.setItem("redirectToPath", window.location.pathname);
-        const { data } = await axios.get(`/api/chapters/sub/${subjectId}`);
+        const { data } = await axios.get(`${api}/chapters/sub/${subjectId}`,{withCredentials:true});
         if (data.success) setChapters(data.chapters);
         else navigate('/admin');
       } catch (error) {
@@ -27,7 +28,7 @@ function ShowChapter() {
   };
 
   const handleDelete = async (chapterId) => {
-    const { data } = await axios.delete(`/api/chapters/${chapterId}`);
+    const { data } = await axios.delete(`${api}/chapters/${chapterId}`,{withCredentials:true});
     if (data.success) {
       setChapters(prev => prev.filter(chapter => chapter._id !== chapterId));
     }

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function AddSubject() {
+  const api = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [subjectName, setSubjectName] = useState('');
 
@@ -11,7 +12,7 @@ function AddSubject() {
     sessionStorage.setItem("redirectTo", window.location.pathname);
 
     const { data } = await axios.post(
-      '/api/subjects',
+      `${api}/subjects`,
       { subjectName },
       { withCredentials: true, headers: { "Content-Type": "application/json" } }
     );

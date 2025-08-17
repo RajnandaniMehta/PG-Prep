@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function QBankQuestion() {
+    const api = import.meta.env.VITE_API_URL;
     const { chapterId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState({});
@@ -19,7 +20,7 @@ function QBankQuestion() {
         const fetchQ = async () => {
             try {
                 sessionStorage.setItem("redirectTo", window.location.pathname);
-                const { data } = await axios.get(`/api/questions/all/${chapterId}`, { withCredentials: true });
+                const { data } = await axios.get(`${api}/questions/all/${chapterId}`, { withCredentials: true });
                 if (data.success) {
                     setQuestions(data.questions);
                     setStartTime(Date.now()); 
@@ -54,7 +55,7 @@ function QBankQuestion() {
     const timeSpent = elapsedTime; 
     const questionId=question._id;
     const workout={questionId,selected,timeSpent};
-    const {data}=await axios.post('/api/users/workout',{workout},{withCredentials:true,headers:{"Content-Type" : "application/json"}});
+    const {data}=await axios.post(`${api}/users/workout`,{workout},{withCredentials:true,headers:{"Content-Type" : "application/json"}});
     clearInterval(timerRef.current);
 
     setSubmittedQuestions(prev => ({

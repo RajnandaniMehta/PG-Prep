@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaQuestionCircle, FaListOl, FaCheckCircle } from 'react-icons/fa';
 
 function UpdateQuestion() {
+  const api = import.meta.env.VITE_API_URL;
   const { questionId } = useParams();
   const navigate = useNavigate();
   const [allChapters, setAllChapters] = useState([]);
@@ -39,7 +40,7 @@ function UpdateQuestion() {
 
   useEffect(() => {
     const fetchChapters = async () => {
-      const { data } = await axios.get("/api/chapters");
+      const { data } = await axios.get(`${api}/chapters`,{withCredentials:true});
       setAllChapters(data.allChapters);
     };
     fetchChapters();
@@ -47,7 +48,7 @@ function UpdateQuestion() {
 
   useEffect(() => {
     const fetchq = async () => {
-      const { data } = await axios.get(`/api/questions/${questionId}`);
+      const { data } = await axios.get(`${api}/questions/${questionId}`,{withCredentials:true});
       setFormData(data.q);
     };
     fetchq();
@@ -57,7 +58,7 @@ function UpdateQuestion() {
     e.preventDefault();
     sessionStorage.setItem("redirectToPath", window.location.pathname);
     const { data } = await axios.post(
-      `/api/questions/${questionId}`,
+      `${api}/questions/${questionId}`,
       { formData },
       { withCredentials: true, headers: { "Content-Type": "application/json" } }
     );

@@ -6,6 +6,7 @@ import { data, useParams } from 'react-router-dom';
 import { FaCheckCircle, FaTimesCircle, FaClock, FaBolt } from "react-icons/fa";
 
 function UserHome() {
+  const api = import.meta.env.VITE_API_URL;
   const { userId } = useParams();
   const [overall, setOverall] = useState({
     total: 0,
@@ -29,7 +30,7 @@ function UserHome() {
   const [timeSpent, setTimeSpent] = useState(0);
   useEffect(() => {
     const fetchDetails = async () => {
-      const { data } = await axios.get('/api/users/progress', { withCredentials: true });
+      const { data } = await axios.get(`${api}/users/progress`, { withCredentials: true });
       setOverall(data.progress);
       setTargetHours(data.targetHours);
       // console.log(data);
@@ -38,7 +39,7 @@ function UserHome() {
   }, [userId]);
   useEffect(() => {
     const dailyProgress = async () => {
-      const { data } = await axios.get('/api/users/dailyprogress', { withCredentials: true });
+      const { data } = await axios.get(`${api}/users/dailyprogress`, { withCredentials: true });
       setDaily(data.progress);
       setCurrStreak(data.currStreak);
       setMaxStreak(data.maxStreak);
@@ -50,7 +51,7 @@ function UserHome() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(targetHours);
-    const { data } = await axios.post("/api/users/dailygoal", { targetHours }, { withCredentials: true, headers: { "Content-Type": "application/json" } });
+    const { data } = await axios.post(`${api}/users/dailygoal`, { targetHours }, { withCredentials: true, headers: { "Content-Type": "application/json" } });
     console.log(data);
     alert(data.message);
     setTargetHours(data.targetHours);

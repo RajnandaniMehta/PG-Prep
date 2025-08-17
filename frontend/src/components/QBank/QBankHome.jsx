@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom';
 function QBankHome() {
+  const api = import.meta.env.VITE_API_URL;
     const navigate=useNavigate();
     const {userId}=useParams();
     const [subjects,setSubjects]=useState([]);
@@ -9,7 +10,7 @@ function QBankHome() {
         const fetchSubjects=async()=>{
           try {
             sessionStorage.setItem("redirectTo",window.location.pathname);
-            const {data}= await axios.get('/api/subjects',{ withCredentials: true });
+            const {data}= await axios.get(`${api}/subjects`,{ withCredentials: true });
             if(data.success)
             setSubjects(data.subjects);
             else {

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 function Subjects() {
+  const api = import.meta.env.VITE_API_URL;
   const [subjects, setSubjects] = useState([]);
   const navigate = useNavigate();
 
@@ -11,7 +12,7 @@ function Subjects() {
     const fetchSubjects = async () => {
       try {
         sessionStorage.setItem("redirectToPath", window.location.pathname);
-        const res = await axios.get('/api/subjects', { withCredentials: true });
+        const res = await axios.get(`${api}/subjects`, { withCredentials: true });
         if (res.data.success) {
           setSubjects(res.data.subjects);
         } else {
@@ -29,7 +30,7 @@ function Subjects() {
   };
 
   const handleDelete = async (subjectId) => {
-    const { data } = await axios.delete(`/api/subjects/${subjectId}`);
+    const { data } = await axios.delete(`${api}/subjects/${subjectId}`,{withCredentials:true});
     if (data.success) {
       setSubjects(prev => prev.filter(subject => subject._id !== subjectId));
     }
