@@ -24,7 +24,7 @@ import Profile from './pages/User/Profile.jsx'
 import GetPost from './pages/User/GetPost.jsx'
 import AddPost from './pages/User/AddPost.jsx'
 import UserHome from './pages/User/UserHome.jsx'
-import Adminhome from './pages/Admin/AdminHome.jsx'
+import Adminhome from './pages/Admin/Adminhome.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
