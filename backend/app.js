@@ -18,7 +18,7 @@ const app=express();
 const MONGO_URL=process.env.ATLASDB_URL;
 const ADMIN_CODE="PG_PREP";
 const seesionOptions={
-    secret:"mySecret",
+    secret:process.env.MY_SECRET,
     resave:false,
     saveUninitialized:true,
     cookie:{
