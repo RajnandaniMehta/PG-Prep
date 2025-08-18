@@ -33,8 +33,14 @@ export const validateQuestion=(req,res,next)=>{
 
 export const isLoggedIn=(req,res,next)=>{
     req.session.redirectUrl=req.originalUrl;
+    console.log("==== isLoggedIn Middleware ====");
+    console.log("Session ID:", req.sessionID);
+    console.log("Session object:", req.session);
+    console.log("isAuthenticated function:", req.isAuthenticated ? "exists" : "not found");
+    console.log("isAuthenticated():", req.isAuthenticated && req.isAuthenticated());
+    console.log("User:", req.user);
     if(req.isAuthenticated && req.isAuthenticated()){
-        req.session.redirectUrl=req.originalUrl;
+        // req.session.redirectUrl=req.originalUrl;
         return next();
     }
     return res.status(401).json({

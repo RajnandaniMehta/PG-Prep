@@ -36,7 +36,7 @@ function UserHome() {
       // console.log(data);
     }
     fetchDetails();
-  }, [userId]);
+  }, [userId,setTargetHours]);
   useEffect(() => {
     const dailyProgress = async () => {
       const { data } = await axios.get(`${api}/users/dailyprogress`, { withCredentials: true });
