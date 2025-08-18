@@ -18,7 +18,9 @@ import jwt from "jsonwebtoken";
 import cookieParser from 'cookie-parser';
 
 const app=express();
-
+if (process.env.NODE_ENV === "production") {
+  app.set('trust proxy', 1);
+}
 app.use(cors({
   origin: ["https://pg-prep-frontend.onrender.com", "http://localhost:5173"],
   credentials: true
@@ -38,6 +40,8 @@ const sessionOptions={
         maxAge: 7 * 24 * 60 * 60 * 1000
     }
 }
+// console.log(process.env.NODE_ENV);
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
@@ -58,7 +62,9 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
+// app.get("/",(req,res)=>{
+//     return res.send("root is working")
+// })
 app.get("/api/",wrapAsync((req,res)=>{
     return res.json({
         success:true,

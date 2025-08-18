@@ -24,21 +24,40 @@ export const login=(req, res, next) => {
       return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
-    req.login(user, async (err) => {
-      if (err) {
-        return res.status(500).json({ success: false, message: "Login failed" });
-      }
+  //   req.login(user, async (err) => {
+  //     if (err) {
+  //       return res.status(500).json({ success: false, message: "Login failed" });
+  //     }
 
-      const userId = String(user._id);
-      const redirectUrl=res.locals.redirectUrl || "/qBanks";
-      // console.log(redirectUrl);
-      return res.json({
-        success: true,
-        message: "User logged in successfully",
-        userId,
-        redirectUrl
-      });
+  //     const userId = String(user._id);
+  //     const redirectUrl=res.locals.redirectUrl || "/qBanks";
+  //     // console.log(redirectUrl);
+  //     return res.json({
+  //       success: true,
+  //       message: "User logged in successfully",
+  //       userId,
+  //       redirectUrl
+  //     });
+  //   }
+  // );
+  req.login(user, async (err) => {
+    if (err) return res.status(500).json({ success: false, message: "Login failed" });
+
+    req.session.save((err) => {
+        if (err) return next(err);
+
+        const userId = String(user._id);
+        const redirectUrl = res.locals.redirectUrl || "/qBanks";
+
+        return res.json({
+            success: true,
+            message: "User logged in successfully",
+            userId,
+            redirectUrl
+        });
     });
+});
+
   })(req, res, next);
 }
 
