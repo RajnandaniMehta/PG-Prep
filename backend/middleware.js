@@ -1,4 +1,5 @@
 import { chapterSchema, questionSchema, subjectSchema } from "./schema.js";
+import jwt from "jsonwebtoken";
 import ExpressError from "./utils/ExpressError.js";
 export const validateSubject=(req,res,next)=>{
     let {error}=subjectSchema.validate(req.body);
@@ -50,6 +51,7 @@ export const saveRedirctUrl=(req,res,next)=>{
 
 export const isAdmin=(req,res,next)=>{
     const token=req.cookies.adminToken;
+    // console.log(token);
     if(!token) return res.status(401).json({ message: "Not authorized" });
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err || decoded.role !== "admin") {
