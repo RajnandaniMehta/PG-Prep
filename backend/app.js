@@ -25,14 +25,15 @@ app.use(cors({
 
 const MONGO_URL=process.env.ATLASDB_URL;
 const ADMIN_CODE="PG_PREP";
-const seesionOptions={
+const sessionOptions={
     secret:process.env.MY_SECRET,
     resave:false,
-    saveUninitialized:true,
+    saveUninitialized:false,
     cookie:{
-        expires:Date.now()+7*24*60*60*1000,
-        maxAge:7*24*60*60*1000,
-        httpOnly:true
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Render pe true hoga
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", 
+        maxAge: 7 * 24 * 60 * 60 * 1000
     }
 }
 app.use(express.json());
@@ -47,7 +48,7 @@ async function main(){
     await mongoose.connect(MONGO_URL,{dbName:"PGPrep"});
 }
 
-app.use(session(seesionOptions));
+app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
