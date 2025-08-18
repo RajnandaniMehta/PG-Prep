@@ -24,7 +24,7 @@ app.use(cors({
 
 
 const MONGO_URL=process.env.ATLASDB_URL;
-const ADMIN_CODE="PG_PREP";
+const ADMIN_CODE=process.env.ADMINPANEL_CODE;
 const sessionOptions={
     secret:process.env.MY_SECRET,
     resave:false,
