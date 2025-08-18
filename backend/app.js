@@ -14,6 +14,8 @@ import postRouter from "./routes/posts.js";
 import { Post } from './models/post.js';
 import cors from "cors";
 import "dotenv/config"
+import jwt from "jsonwebtoken";
+import cookieParser from 'cookie-parser';
 
 const app=express();
 
@@ -38,7 +40,7 @@ const sessionOptions={
 }
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
+app.use(cookieParser());
 main().then(()=>{
     console.log("Connected to DB");
 }).catch((err) =>{
@@ -69,19 +71,25 @@ app.use("/api/chapters",chapterRouter);
 app.use("/api/questions",questionRouter);
 app.use("/api/users",userRouter);
 app.use("/api/posts",postRouter);
+
 app.post("/api/admin",wrapAsync(async(req,res)=>{
     const {code}=req.body;
-    if(code===ADMIN_CODE){
-        req.session.isAdmin=true;
-    return res.json({
-        success:true,
-        message:"You are correct admin"
-    })
+    if(code!==ADMIN_CODE){
+         return res.status(401).json({ message: "Invalid Admin Code" });
     }
-    return res.json({
-        success:false,
-        message:"Unauthorized Access"
-    })
+    const token=jwt.sign(
+        {role:"admin"},
+        process.env.JWT_SECRET,
+        {expiresIn:"24h"}
+    );
+    return res.status(200).cookie("adminToken",token,{
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    }).json({
+        success:true,
+        message:"Admin logged in, see profile",
+    });
     
 }))
 

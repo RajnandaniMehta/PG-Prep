@@ -49,11 +49,13 @@ export const saveRedirctUrl=(req,res,next)=>{
 }
 
 export const isAdmin=(req,res,next)=>{
-    if(!req.session || !req.session.isAdmin ){
-        return res.json({
-            success:false,
-            message:"ACCESS DENIED"
-        })
+    const token=req.cookies.adminToken;
+    if(!token) return res.status(401).json({ message: "Not authorized" });
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err || decoded.role !== "admin") {
+      return res.status(403).json({ message: "Invalid or expired token" });
     }
+    req.admin = decoded;
     next();
+  });
 }
