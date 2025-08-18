@@ -18,9 +18,10 @@ import "dotenv/config"
 const app=express();
 
 app.use(cors({
-  origin: ["https://pg-prep-frontend.onrender.com"], // frontend ka URL
-  credentials: true               
+  origin: ["https://pg-prep-frontend.onrender.com", "http://localhost:5173"],
+  credentials: true
 }));
+
 
 const MONGO_URL=process.env.ATLASDB_URL;
 const ADMIN_CODE="PG_PREP";
@@ -43,7 +44,7 @@ main().then(()=>{
     console.log(err);
 })
 async function main(){
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(MONGO_URL,{dbName:"PGPrep"});
 }
 
 app.use(session(seesionOptions));
